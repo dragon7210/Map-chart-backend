@@ -12,12 +12,12 @@ with open('../data/trial_final.json', 'r') as file:
 
 
 @router.get("/")
-async def findKey():
+async def all():
     return data
 
 
 @router.get("/{key}")
-async def findKey(key: str):
+async def find(key: str):
     for item in data:
         if item['tpt_id_key'] == key:
             return item
