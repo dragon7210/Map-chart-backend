@@ -21,6 +21,7 @@ app = FastAPI(
 
 database = Database()
 engine = database.get_db_connection()
+print(engine)
 
 Base.metadata.create_all(bind=engine)
 

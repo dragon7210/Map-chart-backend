@@ -2,12 +2,12 @@ from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 from sqlalchemy.ext.declarative import declarative_base
 
-DB_USER = "root"
-DB_PASSWORD = ""
+DB_USER = "postgres"
+DB_PASSWORD = "dragon721"
 DB_HOST = "localhost"
-DB_PORT = 3306
-DATABASE = "map"
-MYSQL_URL = "mysql+pymysql://{}:{}@{}:{}/{}?charset=utf8".format(
+DB_PORT = 5432
+DATABASE = "postgres"
+MYSQL_URL = "postgresql://{}:{}@{}:{}/{}".format(
     DB_USER, DB_PASSWORD, DB_HOST, DB_PORT, DATABASE)
 
 POOL_SIZE = 20
@@ -15,8 +15,6 @@ POOL_RECYCLE = 3600
 POOL_TIMEOUT = 15
 MAX_OVERFLOW = 2
 CONNECT_TIMEOUT = 60
-
-print(MYSQL_URL)
 
 
 class Database():

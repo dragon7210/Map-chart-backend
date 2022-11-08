@@ -1,5 +1,7 @@
-from fastapi import APIRouter
-import json
+from fastapi import APIRouter, Depends
+from dependencies.database_deps import get_db_session
+from sqlalchemy.orm import Session
+from models.user import User
 
 router = APIRouter(
     prefix='/digital',
@@ -7,17 +9,14 @@ router = APIRouter(
     responses={404: {"description": "Not found"}},
 )
 
-with open('../data/trial_final.json', 'r') as file:
-    data = json.load(file)
-
 
 @router.get("/")
-async def all():
+async def all(session: Session = Depends(get_db_session)):
+    data = session.query(User).all()
     return data
 
 
 @router.get("/{key}")
 async def find(key: str):
-    for item in data:
-        if item['tpt_id_key'] == key:
-            return item
+
+    return
