@@ -1,7 +1,7 @@
 from fastapi import APIRouter, Depends
 from dependencies.database_deps import get_db_session
 from sqlalchemy.orm import Session
-from models.user import User
+from models.data import Data
 
 router = APIRouter(
     prefix='/digital',
@@ -11,12 +11,41 @@ router = APIRouter(
 
 
 @router.get("/")
-async def all(session: Session = Depends(get_db_session)):
-    data = session.query(User).all()
-    return data
+async def All(session: Session = Depends(get_db_session)):
+    result = session.query(Data).all()
+    return result
 
 
-@router.get("/{key}")
-async def find(key: str):
+@router.get("/{name}")
+async def Find(name: str, session: Session = Depends(get_db_session)):
+    result = session.query(Data).filter(Data.name == name).all()
+    return result
 
-    return
+
+@router.put('/add/')
+async def Add(name: str, age: str, tall: str, session: Session = Depends(get_db_session)):
+    new_Data = Data()
+    new_Data.name = name
+    new_Data.age = age
+    new_Data.tall = tall
+
+    session.add(new_Data)
+    session.commit()
+
+    return session.query(Data).all()
+
+
+@router.delete('/delete/{name}')
+async def Delete(name: str, session: Session = Depends(get_db_session)):
+    session.query(Data).filter(Data.name == name).delete()
+    session.commit()
+    return session.query(Data).all()
+
+
+@router.post('/update/{name}')
+async def Update(name: str, age: str, tall: str, session: Session = Depends(get_db_session)):
+    session.query(Data).filter(Data.name == name).update(
+        {"name": name, "age": age, "tall": tall}, synchronize_session="fetch"
+    )
+    session.commit()
+    return session.query(Data).all()
